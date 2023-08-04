@@ -7,3 +7,5 @@ export const BotAvatar = () => {
     </Avatar>
   );
 };
+
+// mongodb+srv://<username>:<password>@cluster0.kysspuh.mongodb.net/

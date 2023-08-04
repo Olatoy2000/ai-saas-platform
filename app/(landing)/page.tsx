@@ -2,9 +2,9 @@ import Link from "next/link";
 import { Button } from "../../components/ui/button";
 const LandingPage = () => {
   return (
-    <div>
+    <div className="flex flex-col items-center justify-center h-screen gap-10">
       <p>This is the LandingPage (Unprotected)</p>
-      <div className="flex items-center gap-2 justify-start">
+      <div className="flex items-center justify-start gap-2">
         <Link href="/sign-in">
           <Button>Login</Button>
         </Link>

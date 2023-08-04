@@ -3,7 +3,7 @@
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Heading } from "@/components/heading";
-import { MessageSquare } from "lucide-react";
+import { Code } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { formSchema } from "./constant";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
@@ -16,10 +16,12 @@ import { ChatCompletionRequestMessage } from "openai";
 import { Empty } from "@/components/empty";
 import { Loader } from "@/components/loader";
 import { cn } from "@/lib/utils";
+import ReactMarkdown from "react-markdown";
 import { UserAvatar } from "@/components/user-avatar";
 import { BotAvatar } from "@/components/bot-avatar";
+import { Label } from "@/components/ui/label";
 
-const ConversationPage = () => {
+const CodePage = () => {
   const router = useRouter();
 
   const [messages, setMessages] = useState<ChatCompletionRequestMessage[]>([]);
@@ -41,13 +43,13 @@ const ConversationPage = () => {
 
       const newMessages = [...messages, userMessage];
 
-      const response = await axios.post("/api/conversation", {
+      const response = await axios.post("api/code", {
         messages: newMessages,
       });
 
       setMessages((current) => [...current, userMessage, response.data]);
 
-      form.reset();
+      form.reset;
     } catch (error: any) {
       console.log(error);
     } finally {
@@ -57,11 +59,11 @@ const ConversationPage = () => {
   return (
     <div>
       <Heading
-        title="Conversation"
-        description="Our most advanced conversation"
-        icon={MessageSquare}
-        iconColor="text-violet-500"
-        bgColor="bg-violet-500/10"
+        title="Code Generation"
+        description="Generate code using descriptive text"
+        icon={Code}
+        iconColor="text-green-700"
+        bgColor="bg-green-700/10"
       />
       <div className="px-4 lg:px-8">
         <div>
@@ -78,7 +80,7 @@ const ConversationPage = () => {
                       <Input
                         className="border-0 outline-none focus-visible:ring-0 focus-visible:ring-transparent"
                         disabled={isLoading}
-                        placeholder="How do i calculate the radius of a circle"
+                        placeholder="Simple toggle button using react hooks"
                         {...field}
                       />
                     </FormControl>
@@ -95,23 +97,44 @@ const ConversationPage = () => {
           </Form>
         </div>
         <div className="mt-4 space-y-4">
-          {isLoading && <Loader />}
+          {/*      {isLoading && <Loader />}
+          {messages.length === 0 && !isLoading && (
+            <Empty label="No conversation started." />
+          )} */}
+          {isLoading && (
+            <div className="flex items-center justify-center w-full p-8 rounded-lg bg-muted">
+              <Loader />
+            </div>
+          )}
           {messages.length === 0 && !isLoading && (
             <Empty label="No conversation started." />
           )}
           <div className="flex flex-col-reverse gap-y-4">
             {messages.map((message) => (
               <div
-                className={
-                  (cn("p-8 w-full items-start gap-x-8 rounded-lg"),
-                  message.role === "user"
-                    ? "bg-white broder border-black/10"
-                    : "bg-muted")
-                }
-                key={message.content}
-              >
-                {message.role === "user" ? <UserAvatar /> : <BotAvatar />}
-                <p>{message.content}</p>
+              key={message.content}
+              
+                className={cn("p-8 w-full items-start gap-x-8 rounded-lg",
+                  message.role === "user" ? "bg-white border border-black/10" : "bg-muted"
+                )}
+                >
+                {message.role === 'user' ?   <UserAvatar /> : <BotAvatar /> }
+                
+                <ReactMarkdown
+                  components={{
+                    pre: ({ node, ...props }) => (
+                      <div className="w-full p-2 my-2 overflow-auto rounded-lg bg-black/10">
+                        <pre {...props} />
+                      </div>
+                    ),
+                    code: ({ node, ...props }) => (
+                      <code className="p-1 rounded-lg bg-black/10" {...props} />
+                    ),
+                  }}
+                  className="overflow-hidden text-sm leading-7"
+                >
+                  {message.content || ""}
+                </ReactMarkdown>
               </div>
             ))}
           </div>
@@ -121,4 +144,4 @@ const ConversationPage = () => {
   );
 };
 
-export default ConversationPage;
+export default CodePage;
