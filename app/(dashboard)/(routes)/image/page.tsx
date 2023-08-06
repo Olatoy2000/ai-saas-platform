@@ -3,7 +3,7 @@
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Heading } from "@/components/heading";
-import { ImageIcon } from "lucide-react";
+import { ImageIcon, Download } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { amountOptions, formSchema, resolutionOptions } from "./constant";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
@@ -15,6 +15,7 @@ import { useState } from "react";
 import { Empty } from "@/components/empty";
 import { Loader } from "@/components/loader";
 import { cn } from "@/lib/utils";
+import Image from "next/image";
 import {
   Select,
   SelectValue,
@@ -22,6 +23,7 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
+import { Card, CardFooter } from "@/components/ui/card";
 
 const ImagePage = () => {
   const router = useRouter();
@@ -41,7 +43,7 @@ const ImagePage = () => {
     try {
       setImages([]);
       const response = await axios.post("/api/image", values);
-
+      // console.log(values);
       const urls = response.data.map((image: { url: string }) => image.url);
       setImages(urls);
       form.reset();
@@ -157,7 +159,24 @@ const ImagePage = () => {
           {images.length === 0 && !isLoading && (
             <Empty label="No images generated." />
           )}
-          <div>Images will be rendered here</div>
+          <div className="grid grid-cols-1 gap-4 mt-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {images.map((src) => (
+              <Card className="overflow-hidden rounded-lg" key={src}>
+                <div className="relative aspect-square">
+                  <Image src={src} alt="Image" fill />
+                </div>
+                <CardFooter className="p-2">
+                  <Button
+                    onClick={() => window.open(src)}
+                    className="w-full"
+                    variant="secondary"
+                  >
+                    <Download className="w-4 h-4 mr-2" />
+                  </Button>
+                </CardFooter>
+              </Card>
+            ))}
+          </div>
         </div>
       </div>
     </div>

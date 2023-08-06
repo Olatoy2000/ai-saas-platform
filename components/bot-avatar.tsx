@@ -8,4 +8,3 @@ export const BotAvatar = () => {
   );
 };
 
-// mongodb+srv://<username>:<password>@cluster0.kysspuh.mongodb.net/

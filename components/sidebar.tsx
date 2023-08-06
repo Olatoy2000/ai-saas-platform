@@ -12,6 +12,7 @@ import {
   VideoIcon,
   ImageIcon,
   Music,
+  Code,
   Settings,
 } from "lucide-react";
 
@@ -53,7 +54,7 @@ const routes = [
   },
   {
     label: "Code Generation",
-    icon: Music,
+    icon: Code,
     href: "/code",
     color: "text-green-700",
   },
