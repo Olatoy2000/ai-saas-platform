@@ -45,3 +45,13 @@ export const checkApiLimit = async () => {
         return false;
     }
 };
+
+export const getApiLimitCount = async () => {
+const { userId } = auth();
+
+if (userId) {
+    return 0
+}
+
+
+}
