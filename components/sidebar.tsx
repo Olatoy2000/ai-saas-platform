@@ -15,6 +15,7 @@ import {
   Code,
   Settings,
 } from "lucide-react";
+import FreeCounter from "./free-counter";
 
 const montserrat = Montserrat({
   weight: "600",
@@ -65,7 +66,11 @@ const routes = [
   },
 ];
 
-const Sidebar = () => {
+interface SibdebarProps {
+  apiLimitCount: number;
+}
+
+const Sidebar = ({ apiLimitCount = 0 }: SibdebarProps) => {
   const pathname = usePathname();
   return (
     <section className="flex flex-col h-full py-4 space-y-4 bg-[#111827] text-white">
@@ -83,8 +88,11 @@ const Sidebar = () => {
             <Link
               href={route.href}
               key={route.href}
-              className={cn("flex justify-start w-full p-3 text-sm font-medium rounded-lg cursor-pointer group hover:text-white hover:bg-white/10",
-              pathname === route.href ? "text-white bg-white/10" : "text-zinc-400"
+              className={cn(
+                "flex justify-start w-full p-3 text-sm font-medium rounded-lg cursor-pointer group hover:text-white hover:bg-white/10",
+                pathname === route.href
+                  ? "text-white bg-white/10"
+                  : "text-zinc-400"
               )}
             >
               <div className="flex items-center flex-1">
@@ -95,6 +103,7 @@ const Sidebar = () => {
           ))}
         </div>
       </div>
+      <FreeCounter apiLimitCount={apiLimitCount} />
     </section>
   );
 };
